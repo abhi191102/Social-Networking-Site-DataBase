@@ -37,26 +37,13 @@ GROUP BY photos.id
 ORDER BY Total_Likes DESC
 LIMIT 1;
 
-/*version 2*/
-SELECT 
-    username,
-    photos.id,
-    photos.image_url, 
-    COUNT(*) AS total
-FROM photos
-INNER JOIN likes
-    ON likes.photo_id = photos.id
-INNER JOIN users
-    ON photos.user_id = users.id
-GROUP BY photos.id
-ORDER BY total DESC
-LIMIT 1;
+
 
 
 /*Our Investors want to know...
 How many times does the average user post?*/
 /*total number of photos/total number of users*/
-SELECT ROUND((SELECT COUNT(*)FROM photos)/(SELECT COUNT(*) FROM users),2);
+SELECT ROUND((SELECT COUNT(*)FROM photos)/(SELECT COUNT(*) FROM users),2) AS average_posts_per_user;;
 
 
 /*user ranking by postings higher to lower*/
@@ -114,25 +101,5 @@ SELECT COUNT(*) FROM
 	GROUP BY users.id
 	HAVING comment_text IS NULL) AS total_number_of_users_without_comments;
 
-/*Mega Challenges
-Are we overrun with bots and celebrity accounts?*/
-
-
-
-
-/*Find users who have ever commented on a photo*/
-SELECT username,comment_text
-FROM users
-LEFT JOIN comments ON users.id = comments.user_id
-GROUP BY users.id
-HAVING comment_text IS NOT NULL;
-
-
-SELECT COUNT(*) FROM
-(SELECT username,comment_text
-	FROM users
-	LEFT JOIN comments ON users.id = comments.user_id
-	GROUP BY users.id
-	HAVING comment_text IS NOT NULL) AS total_number_users_with_comments;
 
 
